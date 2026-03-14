@@ -1,0 +1,13 @@
+{
+  "name": "noctis-server",
+  "module": "index.ts",
+  "description": "An note taking AI Agent.",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
