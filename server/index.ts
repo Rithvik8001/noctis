@@ -5,6 +5,10 @@ import express, { type Express } from "express";
 
 const app: Express = express();
 
+import authRoute from "./src/routes/auth/route.js";
+
+app.use("/api/v1/auth", authRoute);
+
 const PORT = process.env.PORT;
 const server = async () => {
   try {
