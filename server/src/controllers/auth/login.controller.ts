@@ -43,21 +43,28 @@ const loginController = async (req: Request, res: Response) => {
         message: "Invalid email or password.",
       });
     }
+    const expiryTime = 7 * 24 * 60 * 60; // 7d
 
     const token = jwt.sign(
       { userId: user.userId },
       process.env.JWT_SECRET as string,
-      { expiresIn: "7d" },
+      { expiresIn: expiryTime },
     );
 
-    const { password: _, ...userWithoutPassword } = user;
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: expiryTime,
+      secure: process.env.NODE_ENV == "production",
+    });
+
+    const { password: _, ...userData } = user;
 
     return res.status(200).json({
       success: true,
       message: "Login successful.",
       data: {
-        user: userWithoutPassword,
-        token,
+        user: userData,
       },
     });
   } catch (error) {

@@ -2,8 +2,19 @@ import dotenv from "dotenv";
 dotenv.config();
 import connectDb from "./src/db/config/connection";
 import express, { type Express } from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app: Express = express();
+
+app.use(express.json());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  }),
+);
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
 import authRoute from "./src/routes/auth/route";
 
