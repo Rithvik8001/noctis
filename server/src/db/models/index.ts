@@ -1,1 +1,1 @@
-export { usersTable } from "./users.js";
+export { usersTable } from "./users";
