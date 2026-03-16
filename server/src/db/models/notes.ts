@@ -1,5 +1,6 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { usersTable } from "./users";
 
 export const notesTable = sqliteTable("notes", {
   noteId: text("noteId")
@@ -10,6 +11,10 @@ export const notesTable = sqliteTable("notes", {
   isCompleted: integer("is_completed", { mode: "boolean" })
     .notNull()
     .default(false),
+  userId: text("userId")
+    .notNull()
+    .references(() => usersTable.userId, { onDelete: "cascade" }),
+  scheduledFor: integer("scheduledFor", { mode: "timestamp" }),
   createdAt: integer("createdAt", { mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date()),

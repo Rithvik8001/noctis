@@ -18,9 +18,11 @@ app.use(express.urlencoded({ extended: true }));
 
 import authRoute from "./src/routes/auth/route";
 import profileRoute from "./src/routes/profile/route";
+import agentRoute from "./src/routes/agent/route";
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/profile", profileRoute);
+app.use("/api/v1/agent", agentRoute);
 
 const PORT = process.env.PORT;
 const server = async () => {
