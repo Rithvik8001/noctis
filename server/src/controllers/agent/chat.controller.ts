@@ -3,26 +3,25 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { agentTools } from "../../../agent/tools";
 import { executeTool } from "../../../agent/executor";
 import chatValidation from "../../validations/agent/chat";
+import ApiError from "../../utils/ApiError";
+import ApiResponse from "../../utils/ApiResponse";
+import asyncHandler from "../../utils/asyncHandler";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMENI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
-const chatController = async (req: Request, res: Response) => {
+const chatController = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.userId;
 
   if (!userId) {
-    return res.status(401).json({
-      success: false,
-      message: "Unauthorized.",
-    });
+    throw new ApiError(401, "Unauthorized.");
   }
 
   const validationResult = chatValidation(req.body);
-
   if (!validationResult.success) {
-    return res.status(400).json({
-      success: false,
-      message: validationResult.error.issues[0]?.message,
-    });
+    throw new ApiError(
+      400,
+      validationResult.error.issues[0]?.message ?? "Invalid data.",
+    );
   }
 
   const { message } = validationResult.data;
@@ -66,9 +65,10 @@ const chatController = async (req: Request, res: Response) => {
     result = await chat.sendMessage(toolResults);
     response = result.response;
   }
-  return res.status(201).json({
-    message: response.text(),
-  });
-};
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Chat response.", { message: response.text() }));
+});
 
 export default chatController;
