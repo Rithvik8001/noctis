@@ -17,8 +17,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 import authRoute from "./src/routes/auth/route";
+import profileRoute from "./src/routes/profile/route";
 
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/profile", profileRoute);
 
 const PORT = process.env.PORT;
 const server = async () => {

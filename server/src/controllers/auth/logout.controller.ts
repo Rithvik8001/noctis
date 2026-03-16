@@ -6,6 +6,10 @@ const logoutController = async (req: Request, res: Response) => {
     secure: process.env.NODE_ENV == `production`,
     sameSite: `strict`,
   });
+  res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
 };
 
 export default logoutController;
